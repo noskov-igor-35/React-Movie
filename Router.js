@@ -8,7 +8,7 @@ import NotFoundPage from './NotFoundPage';
 // Перечень маршрутов в приложения
 const ROUTES = {
     '/': () => <HomePage/>,
-    '/movie': () => <MoviePage/>,
+    '/page/:id': ({id}) => <HomePage id={id} />,
     '/movie/:id': ({id}) => <MoviePage id={id}/>,
     '/likes': () => <LikesPage/>,
 };
