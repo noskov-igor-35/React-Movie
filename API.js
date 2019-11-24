@@ -18,7 +18,7 @@ function addGenresInMovieList(Movies, Genres) {
 }
 
 // Метод получения списка фильмов c перечнем жанров по номеру страницы
-function getMovieListWithGenres(page) {
+function getMovieListWithGenres(page = 1) {
   return new Promise((resolve, reject) => {
     Promise.all([getMovieList(page), getGenreList()])
     .then(data => {
@@ -27,9 +27,7 @@ function getMovieListWithGenres(page) {
         maxPage: data[0].maxPage,
         movies: addGenresInMovieList(data[0].movies, data[1])
       })
-    }).catch(function(e) {
-      reject(e);
-    });
+    }).catch((e) => reject(e));
   });
 }
 
@@ -42,11 +40,9 @@ function getMovieList(page) {
       resolve({
         page: data.page,
         maxPage: data.total_pages,
-        movies: data.results
+        movies: data.results || []
       })
-    }).catch(function(e) {
-      reject(e);
-    });
+    }).catch((e) => reject(e));
   });
 }
 
@@ -55,14 +51,22 @@ function getGenreList() {
   return new Promise((resolve, reject) => {
     fetch(`${URL}genre/movie/list${API}${LANGUAGE}`)
     .then(response => response.json())
-    .then(data => {
-      resolve(data.genres);
-    }).catch(function(e) {
-      reject(e);
-    });
+    .then(data => resolve(data.genres))
+    .catch((e) => reject(e));
   });
 }
 
+// Метод получения данных о фильме
+function getMovie(id) {
+  return new Promise((resolve, reject) => {
+    fetch(`${URL}movie/${id}${API}${LANGUAGE}`)
+    .then(response => response.json())
+    .then(data => resolve(data))
+    .catch((e) => reject(e));
+  });
+};
+
 export {
-  getMovieListWithGenres
+  getMovieListWithGenres,
+  getMovie
 };

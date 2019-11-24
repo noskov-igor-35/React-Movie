@@ -1,32 +1,37 @@
 import React, { Component } from 'react';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { navigate } from 'hookrouter';
 
 class PaginationBar extends Component {
+  // Метод осуществляющий переход без перезагрузки страницы
+  goTo(id) {
+    navigate(`/page/${id}`);
+  }
 
   // Метод получения кнопки перехода в начало
   getFirst() {
-    return <PaginationLink first href="/page/1" />
+    return <PaginationLink first onClick={this.goTo.bind(this, 1)}/>
   }
 
   // Метод получения кнопки перехода в конец
   getLast() {
-    return <PaginationLink last href={`/page/${this.props.maxPage}`} />
+    return <PaginationLink last onClick={this.goTo.bind(this, this.props.maxPage)}/>
   }
 
   // Метод получения кнопок крайних страниц
-  getEndBtn(isLast) {
+  getEndBtn(isLast = false) {
     // Если получаем первую страницу и выбрана первая или аналогично последнию дизэблим кнопку
     if ((this.props.selectedPage === 1 && !isLast) || (this.props.selectedPage === this.props.maxPage && isLast)) {
-      return <PaginationItem disabled> { isLast ? this.getLast() : this.getFirst()} </PaginationItem>
+      return <PaginationItem key={`${ isLast }`} disabled> { isLast ? this.getLast() : this.getFirst()} </PaginationItem>
     } else {
-      return <PaginationItem> { isLast ? this.getLast() : this.getFirst()} </PaginationItem>
+      return <PaginationItem key={`${ isLast }`}> { isLast ? this.getLast() : this.getFirst()} </PaginationItem>
     }
   }
 
   // Метод получения активной кнопки навигаиции
   getSelectedNumberBtn(item) {
     return <PaginationItem key={`${item}`} active>
-      <PaginationLink href={`/page/${item}`}>
+      <PaginationLink onClick={this.goTo.bind(this, item)}>
         { item }
       </PaginationLink>
     </PaginationItem>
@@ -35,7 +40,7 @@ class PaginationBar extends Component {
   // Метод получения кнопки навигаиции к определенной странице
   getNumberBtn(item) {
     return <PaginationItem key={`${item}`}>
-      <PaginationLink href={`/page/${item}`}>
+      <PaginationLink onClick={this.goTo.bind(this, item)}>
         { item }
       </PaginationLink>
     </PaginationItem>
@@ -57,32 +62,46 @@ class PaginationBar extends Component {
 
     this.state = {
       minPage: null,
-      maxPage: null
+      maxPage: null,
+      paginationSize: null
     };
   }
 
   static getDerivedStateFromProps(props) {
+    const step = 2;
+
     // При изменении props обновим крайние значения
     return {
-      minPage: props.selectedPage - 2 > 0? props.selectedPage - 2 : 1,
-      maxPage: props.selectedPage + 2 < props.maxPage ? props.selectedPage + 2 : props.maxPage
+      minPage: props.selectedPage - step > 0? props.selectedPage - step : 1,
+      maxPage: props.selectedPage + step < props.maxPage ? props.selectedPage + step : props.maxPage,
+      paginationSize: step
     }
   }
 
   render() {
     let pagination;
 
+    // Вычисляем размер панели в зависимости от разрешения
+    let size;
+    if (this.props.width < 768) {
+      size = 'sm';
+    } else if (this.props.width < 1024) {
+      size = 'md';
+    } else {
+      size = 'lg';
+    }
+
     // Если пришла максимальная страница, то сфомируем пагинацию
     if (this.state.maxPage) {
-      pagination = <Pagination aria-label="Page navigation">
+      pagination = <Pagination size={ size } aria-label="Page navigation">
         { this.getEndBtn() }
         { this.getNumbersBtn() }
         { this.getEndBtn(true) }
       </Pagination>
     }
     return (
-      <div className='PaginationBar c-flex c-flex-justify-content-center'>
-        {pagination}
+      <div className='PaginationBar d-flex justify-content-center bg-light pb-3'>
+        { pagination }
       </div>
     );
   }

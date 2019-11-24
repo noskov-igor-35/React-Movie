@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Router from './Router';
-import {Collapse, Navbar, NavbarBrand, Nav, NavItem, NavLink} from 'reactstrap';
+import { navigate } from 'hookrouter';
+import { Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 
-function App() {
-    return (
-        <div className="App app-min-height-100 c-flex c-flex-direction-column">
-            <Navbar color="dark" dark expand="md">
-                <NavbarBrand href="/">React Movie</NavbarBrand>
-                <Collapse navbar>
+class App extends Component{
+    // Метод осуществляющий переход без перезагрузки страницы
+    goTo(path) {
+        navigate(path);
+    }
+
+    render() {
+        return (
+            <div className="App rc-app_min-height--100 d-flex flex-column">
+                <Navbar color="dark" dark expand="md">
+                    <NavbarBrand
+                        className='text-white rc_cursor--pointer'
+                        onClick={this.goTo.bind(this, "/")}>
+                            React Movie
+                    </NavbarBrand>
                     <Nav className="ml-auto" navbar>
                         <NavItem>
-                            <NavLink href="/likes">Избранное</NavLink>
+                            <NavLink 
+                                className='text-white rc_cursor--pointer' 
+                                onClick={this.goTo.bind(this, "/likes")}>
+                                    Избранное
+                            </NavLink>
                         </NavItem>
                     </Nav>
-                </Collapse>
-            </Navbar>
-            <Router/>
-        </div>
-    );
+                </Navbar>
+                <Router/>
+            </div>
+        );
+    }
 };
-
 export default App;
