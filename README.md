@@ -8,7 +8,7 @@
 npm install --save react@^16.8.0 react-dom@^16.8.0
 ```
 
-###  Разверните приложеине и зайдите в него
+###  Разверните приложение и зайдите в него
 ```
 npx create-react-app cinema
 cd cinema

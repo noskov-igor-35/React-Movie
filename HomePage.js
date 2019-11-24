@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import {Container, Row, Col, Jumbotron} from 'reactstrap';
+import {Container, Row, Col, Jumbotron, Spinner} from 'reactstrap';
 import Previewer from './Previewer'
+import PaginationBar from './Pagination'
 import {getMovieListWithGenres} from './API';
 
 class HomePage extends Component {
@@ -38,6 +39,7 @@ class HomePage extends Component {
     getMovieListWithGenres(this.props.id || 1).then((data) => {
       this.setState({
         page: data.page,
+        maxPage: data.maxPage,
         movies: data.movies,
         isLoad: true
       });
@@ -63,7 +65,7 @@ class HomePage extends Component {
       return <Row key={`${i}`}> {
         // Внутри стоки разбираем записи на колонки
         row.map((item) =>
-          <Col className='c-padding-15' xs={ rowSize - 1 || 1 } key={`${item.id}`}>
+          <Col className='c-padding-15' xs={ rowSize - 1 || 12 } key={`${item.id}`}>
             <Previewer data={item}/>
           </Col>
         )
@@ -73,14 +75,15 @@ class HomePage extends Component {
 
   render() {
     // Если фильмы загрузились, отобразим их
-    const layout = this.state.isLoad ? this.getList() : <div>LOADING</div>
+    const layout = this.state.isLoad ? this.getList() : <Spinner color="warning" />
     return (
-      <div id='HomePage' className="HomePage">
-        <Jumbotron>
-          <Container>
+      <div id='HomePage' className="HomePage c-flex c-flex-direction-column c-flex-grow-1">
+        <Jumbotron className='c-flex c-flex-grow-1'>
+          <Container className={`${ this.state.isLoad ? '' : 'c-flex '}c-flex-align-items-center c-flex-justify-content-center`}>
             {layout}
           </Container>
         </Jumbotron>
+        <PaginationBar selectedPage={ this.state.page } maxPage={ this.state.maxPage}/>
       </div>
     );
   }

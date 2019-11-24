@@ -24,6 +24,7 @@ function getMovieListWithGenres(page) {
     .then(data => {
       resolve({
         page: data[0].page,
+        maxPage: data[0].maxPage,
         movies: addGenresInMovieList(data[0].movies, data[1])
       })
     }).catch(function(e) {
@@ -40,6 +41,7 @@ function getMovieList(page) {
     .then(data => {
       resolve({
         page: data.page,
+        maxPage: data.total_pages,
         movies: data.results
       })
     }).catch(function(e) {

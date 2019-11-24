@@ -10,8 +10,10 @@ function Previewer(props) {
       <Card className="c-min-height-100">
         <CardImg top width="100%" src={`${POSTER_PATH}${props.data.poster_path}`} alt={props.data.title}/>
         <CardBody>
-          <CardTitle>{props.data.title}</CardTitle>
-          <CardSubtitle>{props.data.original_title}</CardSubtitle>
+          <CardTitle><h5>{props.data.title}</h5></CardTitle>
+          <CardSubtitle className="c-additional-color">
+            <h6>{props.data.original_title}</h6>
+          </CardSubtitle>
           <CardText>Жанр: {genres}</CardText>
         </CardBody>
       </Card>
