@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Spinner } from 'reactstrap';
+import {navigate} from 'hookrouter';
 import Previewer from './Previewer'
 import PaginationBar from './Pagination'
 import { getMovieListWithGenres } from './API';
@@ -9,12 +10,12 @@ const LAYOULS_LINES = 12;
 class HomePage extends Component {
   // Метод получения актуальных размеров корневой ноды
   updateDimensions() {
-      // Получаем корневую ноду
-      const node = document.getElementById('HomePage');
+      // Получаем ширину корневого элемента и записываем значение в state
+      this.setState({width : this.homePageRef.current.offsetWidth});
+  }
 
-      // Получаем ширину ноды и записываем значение в state
-      const width = node.offsetWidth;
-      this.setState({width});
+  handleClick(id) {
+    navigate(`/movie/${id}`);
   }
 
   // Метод получающий кол-во элементов в строке в зависимости от ширины
@@ -54,8 +55,8 @@ class HomePage extends Component {
         return <Row key={`${i}`}> {
           // Внутри стоки разбираем записи на колонки
           row.map((item) =>
-            <Col className='py-3' xs={ LAYOULS_LINES/rowCount } key={ `${item.id}` }>
-              <Previewer data={ item }/>
+            <Col className='d-flex py-3' xs={ LAYOULS_LINES/rowCount } key={ `${item.id}` }>
+              <Previewer data={ item } handleClick={this.handleClick}/>
             </Col>
           )
         } </Row>
@@ -69,6 +70,9 @@ class HomePage extends Component {
     // Связываем функцию обрабатывающию смену размера
     this.updateDimensions = this.updateDimensions.bind(this);
 
+    // Получим корневой элемент компонента для считывания ширины
+    this.homePageRef = React.createRef();
+
     this.state = {
       isLoad: false,
       width: null
@@ -79,7 +83,7 @@ class HomePage extends Component {
     // Если фильмы загрузились, отобразим их
     const layout = this.state.isLoad ? this.getList() : <Spinner color="warning" />
     return (
-      <div id='HomePage' className="HomePage d-flex flex-column flex-grow-1">
+      <div ref={ this.homePageRef } className="HomePage d-flex flex-column flex-grow-1">
         <div className='py-5 px-4 bg-light d-flex flex-grow-1 align-items-center justify-content-center'>
           { layout }
         </div>

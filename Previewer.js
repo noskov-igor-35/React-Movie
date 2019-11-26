@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import {Card, CardImg, CardText, CardBody,CardTitle, CardSubtitle} from 'reactstrap';
-import {navigate} from 'hookrouter';
 
-const POSTER_PATH = 'http://image.tmdb.org/t/p/w300/';
+const POSTER_PATH = 'http://image.tmdb.org/t/p/w300';
 
 class Previewer extends Component {
+  // Обработчик клика по карточке, вызывает установленный компоненту handleClick
   handleClick(id) {
-    navigate(`/movie/${id}`);
+    if (this.props.handleClick) {
+      this.props.handleClick(id);
+    }
   }
 
   render() {
@@ -22,9 +24,9 @@ class Previewer extends Component {
     
     return (
       <div 
-        className="previewer rc_height--100 rc_cursor--pointer" 
+        className="previewer d-flex flex-grow-1 rc_cursor--pointer" 
         onClick={this.handleClick.bind(this, this.props.data.id)}>
-        <Card className="rc_minHeight--100">
+        <Card className="flex-grow-1">
           <CardImg 
             top width="100%" 
             src={ `${POSTER_PATH}${this.props.data.poster_path}` } 

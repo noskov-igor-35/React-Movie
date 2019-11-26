@@ -20,18 +20,14 @@ body {
   min-height: 100vh;
 }
 
-.rc_height--100 {
-  height: 100%;
-}
-
-.rc_minHeight--100 {
-  min-height: 100%;
-}
-
 .rc_overflow-y--scroll {
   overflow-y: scroll;
 }
 
 .rc_cursor--pointer {
   cursor: pointer;
+}
+
+.rc-display--none {
+  display: none!important;
 }

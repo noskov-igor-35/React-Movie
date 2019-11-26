@@ -18,7 +18,7 @@ class App extends Component{
                         onClick={this.goTo.bind(this, "/")}>
                             React Movie
                     </NavbarBrand>
-                    <Nav className="ml-auto" navbar>
+                    <Nav className="ml-auto rc-display--none" navbar>
                         <NavItem>
                             <NavLink 
                                 className='text-white rc_cursor--pointer' 
