@@ -1,6 +1,6 @@
 import React from 'react';
 import {useRoutes} from 'hookrouter';
-import HomePage from './HomePage';
+import HomePage from './HomePage/HomePage';
 import MoviePage from './MoviePage/MoviePage';
 import LikesPage from './LikesPage';
 import NotFoundPage from './NotFoundPage';

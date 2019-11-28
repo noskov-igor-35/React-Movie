@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card, CardImg, CardText, CardBody,CardTitle, CardSubtitle} from 'reactstrap';
 
-const POSTER_PATH = 'http://image.tmdb.org/t/p/w300';
+const POSTER_PATH = 'http://image.tmdb.org/t/p/w';
 
 class Previewer extends Component {
   // Обработчик клика по карточке, вызывает установленный компоненту handleClick
@@ -29,7 +29,7 @@ class Previewer extends Component {
         <Card className="flex-grow-1">
           <CardImg 
             top width="100%" 
-            src={ `${POSTER_PATH}${this.props.data.poster_path}` } 
+            src={ `${POSTER_PATH}${this.props.width}${this.props.data.poster_path}` } 
             alt={ this.props.data.title || this.props.data.original_title }
           />
           <CardBody>

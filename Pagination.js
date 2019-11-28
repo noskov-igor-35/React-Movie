@@ -8,6 +8,12 @@ class PaginationBar extends Component {
     navigate(`/page/${id}`);
   }
 
+  // Метод получения актуальных размеров корневой ноды
+  updateDimensions() {
+    // Получаем ширину корневого элемента и записываем значение в state
+    this.setState({width : this.baseRef.current.offsetWidth});
+  }
+
   // Метод получения кнопки перехода в начало
   getFirst() {
     return <PaginationLink first onClick={this.goTo.bind(this, 1)}/>
@@ -60,10 +66,16 @@ class PaginationBar extends Component {
   constructor(props) {
     super(props);
 
+    // Связываем функцию обрабатывающию смену размера
+    this.updateDimensions = this.updateDimensions.bind(this);
+
+    // Получим корневой элемент компонента для считывания ширины
+    this.baseRef = React.createRef();
+
     this.state = {
       minPage: null,
       maxPage: null,
-      paginationSize: null
+      width: null
     };
   }
 
@@ -73,8 +85,7 @@ class PaginationBar extends Component {
     // При изменении props обновим крайние значения
     return {
       minPage: props.selectedPage - step > 0? props.selectedPage - step : 1,
-      maxPage: props.selectedPage + step < props.maxPage ? props.selectedPage + step : props.maxPage,
-      paginationSize: step
+      maxPage: props.selectedPage + step < props.maxPage ? props.selectedPage + step : props.maxPage
     }
   }
 
@@ -83,16 +94,16 @@ class PaginationBar extends Component {
 
     // Вычисляем размер панели в зависимости от разрешения
     let size;
-    if (this.props.width < 768) {
+    if (this.state.width < 768) {
       size = 'sm';
-    } else if (this.props.width < 1024) {
+    } else if (this.state.width < 1024) {
       size = 'md';
     } else {
       size = 'lg';
     }
 
-    // Если пришла максимальная страница, то сфомируем пагинацию
-    if (this.state.maxPage) {
+    // Если пришла максимальная страница и вычислина ширина, то сфомируем пагинацию
+    if (this.state.maxPage && this.state.width) {
       pagination = <Pagination size={ size } aria-label="Page navigation">
         { this.getEndBtn() }
         { this.getNumbersBtn() }
@@ -100,10 +111,19 @@ class PaginationBar extends Component {
       </Pagination>
     }
     return (
-      <div className='PaginationBar d-flex justify-content-center bg-light pb-3'>
+      <div ref={ this.baseRef } className='PaginationBar d-flex justify-content-center bg-light pb-3'>
         { pagination }
       </div>
     );
+  }
+
+  componentDidMount() {
+    this.updateDimensions();
+    window.addEventListener("resize", this.updateDimensions);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions);
   }
 }
 
