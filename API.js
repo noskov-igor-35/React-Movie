@@ -17,6 +17,16 @@ function addGenresInMovieList(Movies, Genres) {
   })
 }
 
+// Метод получения списка похожих фильмов
+function getRecommendationsList(id) {
+  return new Promise((resolve, reject) => {
+    fetch(`${URL}movie/${id}/recommendations${API}${LANGUAGE}`)
+    .then(response => response.json())
+    .then(data => resolve(data))
+    .catch((e) => reject(e));
+  });
+}
+
 // Метод получения списка фильмов c перечнем жанров по номеру страницы
 function getMovieListWithGenres(page = 1) {
   return new Promise((resolve, reject) => {
@@ -67,6 +77,7 @@ function getMovie(id) {
 };
 
 export {
+  getRecommendationsList,
   getMovieListWithGenres,
   getMovie
 };

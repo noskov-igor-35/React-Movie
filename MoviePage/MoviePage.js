@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Spinner } from 'reactstrap';
-import { getMovie } from '../API';
+import { getMovie, getRecommendationsList } from '../API';
 import './MoviePage.css';
 
 const POSTER_PATH = 'http://image.tmdb.org/t/p/w300';
@@ -66,6 +66,9 @@ class MoviePage extends Component {
           data,
           isLoad: true
         });
+        getRecommendationsList(this.props.id).then((data) => {
+          console.log(data);
+        })
       })
     }
   }

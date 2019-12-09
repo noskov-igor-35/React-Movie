@@ -13,13 +13,19 @@ class HomePage extends Component {
 
   // Метод формирующий верстку с фильмами для компонента
   getList() {
-    return <div className='d-flex justify-content-center flex-wrap'>{
+    const emptyBlocks = ['empty1', 'empty2', 'empty3', 'empty4', 'empty5'];
+    return <div className='d-flex justify-content-center flex-wrap'>
+    {
       this.state.movies.map(item => {
         return <div className='homePage-previewerBlock d-flex flex-grow-1 py-3 px-3' key={ `${item.id}` }>
           <Previewer data={ item } width={ 500 } handleClick={this.handleClick}/>
         </div>
-      })  
-    }</div>
+      })
+    }
+    {
+      emptyBlocks.map(key => <div className="homePage-previewerBlock flex-grow-1" key={`${key}`}></div>)
+    }
+    </div>
   }
 
   constructor(props) {
